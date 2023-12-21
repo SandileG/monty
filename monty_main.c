@@ -1,12 +1,5 @@
 #include "monty.h"
 
-/**
- * main - Entry point for the Monty ByteCode Interpreter.
- * @argc: Number of command-line arguments.
- * @argv: Array of command-line arguments.
- *
- * Return: Always 0 on success.
- */
 int main(int argc, char *argv[])
 {
 	FILE *file;
@@ -26,7 +19,7 @@ int main(int argc, char *argv[])
 	file = fopen(argv[1], "r");
 	if (!file)
 	{
-		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
+		perror("Error: Can't open file");
 		exit(EXIT_FAILURE);
 	}
 
@@ -56,13 +49,14 @@ int main(int argc, char *argv[])
 	fclose(file);
 
 	/* Clean up remaining nodes in the stack if needed */
-	while (stack)
+	if (stack)
 	{
-		stack_t *temp = stack;
-
-		stack = stack->next;
-
-		free(temp);
+		while (stack)
+		{
+			stack_t *temp = stack;
+			stack = stack->next;
+			free(temp);
+		}
 	}
 
 	return (0);
