@@ -8,6 +8,7 @@
 void push(stack_t **stack, unsigned int line_number)
 {
 	char *value_str;
+	char *endptr;
 	int value;
 
 	/* Check if there is an argument. */
@@ -25,8 +26,15 @@ void push(stack_t **stack, unsigned int line_number)
 		exit(EXIT_FAILURE);
 	}
 
-	/* Convert string to integer using atoi. */
-	value = atoi(value_str);
+	/* Convert string to integer using strtol for better error handling. */
+	value = strtol(value_str, &endptr, 10);
+
+	/* Check for conversion errors. */
+	if (*endptr != '\0')
+	{
+		fprintf(stderr, "L%u: usage: push integer\n", line_number);
+		exit(EXIT_FAILURE);
+	}
 
 	/* Separate block for memory allocation and node setup. */
 	{
